@@ -1621,10 +1621,9 @@ function fmod_event_create_instance(soundpath) {
 		case "music/w2/saloon":
 		case "music/w4/sewer":
 		case "music/pillarmusic":
-		case "music/boss/fakepep":
-		
 		case "sfx/pep/cross":
 			return new fmod_sound(soundlist, false, 1, 0, true)
+		case "music/boss/fakepep":
 		case "music/secretworld":
 			var s = new fmod_sound(soundlist, false, 1, 0, true)
 			s.sndgain = 1.25
