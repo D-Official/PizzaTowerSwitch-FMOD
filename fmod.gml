@@ -540,7 +540,7 @@ function fmod_update() {
 			ds_list_delete(global.sounds_to_play, i)
 			len--
 			i--
-		}	
+		}
 	}
 	global.fmod_pause_frame = false
 
@@ -1109,7 +1109,7 @@ function fmod_event_create_instance(soundpath) {
 					return;
 				fmod_event_instance_stop(self, true, true) 
 				t_state = newstate;
-				var playingsound = play_sound(soundlist[newstate], newstate != 2, 1)
+				var playingsound = audio_play_sound(soundlist[newstate], 10, newstate != 2, newstate == 2 ? 1.4 : 1)
 				ds_list_add(sound_instances, playingsound)	
 				
 			})
@@ -1632,7 +1632,7 @@ function fmod_event_create_instance(soundpath) {
 		case "music/w3/beach":
 			return track_loop_intro(soundlist, [2.08, 2 * 60 + 47.64]) // at this point i got tired of saying what levels these are, figure it out
 		case "music/w3/forest": 
-			return swap_three_tracks_intro(soundlist, [0, 6 * 2 + 42.76], [-1, -1], [-1, -1])
+			return swap_three_tracks_intro(soundlist, [0, 60 * 2 + 42.76], [-1, -1], [-1, -1])
 		case "music/w3/golf":
 			return new fmod_sound(soundlist, undefined, undefined, undefined, true, [0, 3 * 60 + 27.03])
 		case "music/w3/space":
@@ -1902,7 +1902,7 @@ function fmod_event_create_instance(soundpath) {
 			function(_rank) {
 				t_anyvar1 = _rank
 			})
-			s.delay = 3
+			s.delay = 5
 			return s;
 		case "music/halloweenpause":
 			return new fmod_sound(soundlist, false, undefined, undefined, true, [-1, -1], true, 
@@ -2141,9 +2141,8 @@ function swap_three_tracks(_soundlist, _loop_points1, _loop_points2, _loop_point
 function swap_three_tracks_intro(_soundlist, _loop_points1, _loop_points2, _loop_points3, pause_until_play = false) {
 	var s = swap_three_tracks(_soundlist, [0, _loop_points1[1]], _loop_points2, _loop_points3, pause_until_play);
 	with (s) {
-		anyvar1 = 0
 		stepfunc = method(self, function () {
-			if t_anyvar1 != 0 or is_undefined(ds_list_find_value(sound_instances, 0))
+			if t_anyvar1 != -1 or is_undefined(ds_list_find_value(sound_instances, 0))
 				return;
 			if audio_sound_get_track_position(sound_instances[| 0]) > loop_points1[0] {
 				change_loop_points(loop_points1);
