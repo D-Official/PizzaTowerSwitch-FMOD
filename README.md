@@ -16,11 +16,12 @@ Anything! It's yours!
 
 
 SR 4 released on 13/11/2023. If you want to verify that the file you have is good:
+```
 Name: Pizza Tower v1.0.5952 SR 4 [05000FD261232000][v0].nsp
 Size: 360999128 bytes (344 MiB)
 MD5: e286b8c4f3db3b6ba14adff07cb34036
 SHA256: ad6be6ef445e56d8cfeb22e271452e7375dbe8ea26d9fc5dd896eea4ed36b304
-
+```
 # New method of distribution
 Starting from SR 4 this repository will (MAYBE, might not happen if Tinfoil shops become available again) also distribute encrypted .bin files of the port ***in the releases tab*** (if it's empty, I haven't decided to do this yet). In order to decrypt it, you must
 1. Take the data.win of the matching PC Pizza Tower version
