@@ -14,8 +14,15 @@ as the person managing the owner account has lost access to it.
 As per the license, and the comment inside fmod.gml: You can do whatever with this code! (and credit would be nice). Go nuts! Port the game to your phone using this! Your smart microwave! 
 Anything! It's yours!
 
+
+SR 4 released on 13/11/2023. If you want to verify that the file you have is good:
+Name: Pizza Tower v1.0.5952 SR 4 [05000FD261232000][v0].nsp
+Size: 360999128 bytes (344 MiB)
+MD5: e286b8c4f3db3b6ba14adff07cb34036
+SHA256: ad6be6ef445e56d8cfeb22e271452e7375dbe8ea26d9fc5dd896eea4ed36b304
+
 # New method of distribution
-Starting from SR 4 this repository will (MAYBE, might not happen if Tinfoil shops become available again) also distribute encrypted .bin files of the port. In order to decrypt it, you must
+Starting from SR 4 this repository will (MAYBE, might not happen if Tinfoil shops become available again) also distribute encrypted .bin files of the port ***in the releases tab*** (if it's empty, I haven't decided to do this yet). In order to decrypt it, you must
 1. Take the data.win of the matching PC Pizza Tower version
 2. Remove every other (odd) byte
 3. Duplicate the bytes until it matches in size with the .bin
@@ -24,5 +31,5 @@ Starting from SR 4 this repository will (MAYBE, might not happen if Tinfoil shop
 The new list of bytes is the bytes for the NSP. By doing this, you have either proven ownership of Pizza Tower,
 or you have committed piracy, in which case that action is proof that you know how to pirate games anyways and that none of this matters.
 
-Luckily for you, the `decrypt.py` script included in the repository does all of this for you! Just be sure to place all the right files with the correct names next to the script.
+Luckily for you, the `decrypt.py` script included in the repository does all of this automatically! Just be sure to place all the right files with the correct names next to the script.
 
