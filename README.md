@@ -32,11 +32,12 @@ as the person managing the owner account has lost access to it.
 
 
 # New method of distribution
-A new potential method of distributing the port is being considered. It would work by releasing an encrypted .bin of the port's NSP in the releases tab. To decrypt it, you must:
+A new potential method of distributing the port is being considered. It would work by releasing an encrypted .bin of the port's NSP in the releases tab. To decrypt it, you would have to:
 1. Take bytes of the data.win of the matching PC Pizza Tower version
 2. Remove every other (odd) byte
 3. Duplicate the bytes until it matches in size with the .bin
 4. XOR the new bytes we made with the bytes of the encrypted .bin file
+
 (The `decrypt.py` script does all of these steps automatically!)
 
 The new list of bytes is the bytes for the NSP. By doing this, you have either proven ownership of Pizza Tower,
