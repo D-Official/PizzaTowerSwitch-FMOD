@@ -14,26 +14,32 @@ Same goes for the Android port of the Switch port (Yes, that's a thing)***
 
 The official way to obtain the port is through Tinfoil shops. Pretty much all the popular ones have it, as far as I know.
 
-SR 4 released on 13/11/2023. If you want to verify that the file you have is good:
+I don't remember when SR 1 and SR 2 were released.
+
+SR 3 released on 9/5/2023.
+
+SR 4 released on 13/11/2023. If you want to verify that the file you have is good, here's some data:
 ```
 Name: Pizza Tower v1.0.5952 SR 4 [05000FD261232000][v0].nsp
 Size: 360999128 bytes (344 MiB)
 MD5: e286b8c4f3db3b6ba14adff07cb34036
 SHA256: ad6be6ef445e56d8cfeb22e271452e7375dbe8ea26d9fc5dd896eea4ed36b304
+```
+The port will always tell you the latest version if you launch it while connected to the internet. The information will be available on the bottom right of the save select screen.
 
 This repository is replacing https://github.com/TurtleHouse/PizzaTowerSwitch-FMOD
 as the person managing the owner account has lost access to it.
 
-```
+
 # New method of distribution
-Starting from SR 4 this repository will (MAYBE, might not happen if Tinfoil shops become available again) also distribute encrypted .bin files of the port ***in the releases tab*** (if it's empty, I haven't decided to do this yet). In order to decrypt it, you must
-1. Take the data.win of the matching PC Pizza Tower version
+A new potential method of distributing the port is being considered. It would work by releasing an encrypted .bin of the port's NSP in the releases tab. To decrypt it, you must:
+1. Take bytes of the data.win of the matching PC Pizza Tower version
 2. Remove every other (odd) byte
 3. Duplicate the bytes until it matches in size with the .bin
 4. XOR the new bytes we made with the bytes of the encrypted .bin file
+(The `decrypt.py` script does all of these steps automatically!)
 
 The new list of bytes is the bytes for the NSP. By doing this, you have either proven ownership of Pizza Tower,
 or you have committed piracy, in which case that action is proof that you know how to pirate games anyways and that none of this matters.
 
-Luckily for you, the `decrypt.py` script included in the repository does all of this automatically! Just be sure to place all the right files with the correct names next to the script.
-
+If the current situation with Tinfoil shops does not improve, this method might be implemented. But as of now, the only way to get the port officially is through the shops.
