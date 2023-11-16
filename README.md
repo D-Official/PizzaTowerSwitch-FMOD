@@ -1,3 +1,5 @@
+# Really important information
+To decrypt the .bins in the releases tab, see the relevant section below.
 # Important Information
 This repository contains select code files related to FMOD from the unofficial Pizza Tower Switch port.
 With these files, the game's audio code will become 100% GML, allowing it to be ported more easily.
@@ -30,10 +32,9 @@ The port will always tell you the latest version if you launch it while connecte
 This repository is replacing https://github.com/TurtleHouse/PizzaTowerSwitch-FMOD
 as the person managing the owner account has lost access to it.
 
-
 # New method of distribution
-A new potential method of distributing the port is being considered. It would work by releasing an encrypted .bin of the port's NSP in the releases tab. To decrypt it, you would have to:
-1. Take bytes of the data.win of the matching PC Pizza Tower version
+In order to decrypt the .bins found in the releases tab, you must:
+1. Take the bytes from the data.win of the matching PC Pizza Tower version
 2. Remove every other (odd) byte
 3. Duplicate the bytes until it matches in size with the .bin
 4. XOR the new bytes we made with the bytes of the encrypted .bin file
@@ -42,5 +43,3 @@ A new potential method of distributing the port is being considered. It would wo
 
 The new list of bytes is the bytes for the NSP. By doing this, you have either proven ownership of Pizza Tower,
 or you have committed piracy, in which case that action is proof that you know how to pirate games anyways and that none of this matters.
-
-If the current situation with Tinfoil shops does not improve, this method might be implemented. But as of now, the only way to get the port officially is through the shops.
