@@ -1,7 +1,7 @@
 /*
 (This file is a Script resource inside the GameMaker project)
 
-this file gives gml contents to every fmod function the pizza tower switch port (v1.0.5952 SR 4) uses. by the popular demand of two (2) people, here's a public version with some comments
+this file gives gml contents to every fmod function the pizza tower switch port (v1.0.5952 SR 5) uses. by the popular demand of two (2) people, here's a public version with some comments
 you may do whatever you want with it. credit would be nice.
 
 *this will NOT work if you just import it into pizza tower! to see why, read below*
@@ -1019,8 +1019,8 @@ function fmod_event_create_instance(soundpath) {
 		case "sfx/voice/pizzagranny":
 			return new fmod_sound_3d(soundlist, true, 1.1, 0.1)
 		case "sfx/pep/gotsupertaunt":
-			var s = new fmod_sound_3d(soundlist)
-			s.sndgain = 1.4
+			var s = new fmod_sound(soundlist)
+			s.sndgain = 1.1
 			return s;
 		case "sfx/misc/toppinhelp":
 		case "sfx/rat/ratdead":
