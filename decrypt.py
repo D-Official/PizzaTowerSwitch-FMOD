@@ -11,7 +11,7 @@ def duplicate_list_until_length_matches(original_list, target_length):
         result_list += original_list
     return result_list[:target_length]
         
-encrypted_path = 'pizza_tower_switch_port_encrypted.bin'
+encrypted_path = 'ENCRYPTED_SR_5.bin'
 data_path = 'data.win'
 
 print("Reading files")
@@ -21,13 +21,13 @@ data_bytes = read_file_as_bytes(data_path)[::2] # [::2] removes half of the byte
 
 data_big = duplicate_list_until_length_matches(data_bytes, len(encrypted_bytes))
 
-print("Decrypting")
+print("Decrypting (This could take a while...)")
 
 nsp_bytes = [byte1 ^ byte2 for byte1, byte2 in zip(encrypted_bytes, data_big)]
 
 print("Saving .nsp")
 
-with open("Pizza Tower v1.0.5952 SR 4 [05000FD261232000][v0].nsp", 'wb') as file:
+with open("Pizza Tower v1.0.5952 SR 5 [05000FD261232000][v0].nsp", 'wb') as file:
     file.write(bytes(nsp_bytes))
 
 print("Done!")
