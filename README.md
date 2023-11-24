@@ -20,13 +20,17 @@ I don't remember when SR 1 and SR 2 were released.
 
 SR 3 released on 9/5/2023.
 
-SR 4 released on 13/11/2023. If you want to verify that the file you have is good, here's some data:
+SR 4 released on 13/11/2023.
+
+SR 5 released on 24/11/2023. If you want to verify that the file you have is good:
 ```
-Name: Pizza Tower v1.0.5952 SR 4 [05000FD261232000][v0].nsp
+Name: Pizza Tower v1.0.5952 SR 5 [05000FD261232000][v0].nsp
 Size: 360999128 bytes (344 MiB)
-MD5: e286b8c4f3db3b6ba14adff07cb34036
-SHA256: ad6be6ef445e56d8cfeb22e271452e7375dbe8ea26d9fc5dd896eea4ed36b304
+MD5: 4fcc57ac099013ddfd4f23bd0db059ae
+SHA256: 632d104fd0ceeb5845ce51df3fb96fe5c01738a88b5e483fba063adf6c7456db
 ```
+Miraculously, the NSP is the same size as SR 4. Praise Allah :pray: 
+
 The port will always tell you the latest version if you launch it while connected to the internet. The information will be available on the bottom right of the save select screen.
 
 This repository is replacing https://github.com/TurtleHouse/PizzaTowerSwitch-FMOD
