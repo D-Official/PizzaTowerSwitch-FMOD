@@ -17,19 +17,16 @@ Same goes for the Android port of the Switch port (Yes, that's a thing)***
 The official way to obtain the port is through Tinfoil shops. Pretty much all the popular ones have it, as far as I know.
 
 I don't remember when SR 1 and SR 2 were released.
-
 SR 3 released on 9/5/2023.
-
 SR 4 released on 13/11/2023.
 
-SR 5 released on 24/11/2023. If you want to verify that the file you have is good:
+SR 5 released on 24/11/2023, and SR 5 Fix 1 on 29/11/2023. If you want to verify that the file you have is good:
 ```
 Name: Pizza Tower v1.0.5952 SR 5 [05000FD261232000][v0].nsp
-Size: 360999128 bytes (344 MiB)
-MD5: 4fcc57ac099013ddfd4f23bd0db059ae
-SHA256: 632d104fd0ceeb5845ce51df3fb96fe5c01738a88b5e483fba063adf6c7456db
+Size: 361048064 bytes (344 MiB)
+SHA256: 6c6b7fbd51d023bf6cc9cd5b98066c8d49c8c01c3a191cc722959818240b0203
+MD5: 3fba5e517cdfd9072303919f1c6e3cc5
 ```
-Miraculously, the NSP is the same size as SR 4. Praise Allah :pray: 
 
 The port will always tell you the latest version if you launch it while connected to the internet. The information will be available on the bottom right of the save select screen.
 
