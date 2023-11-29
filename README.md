@@ -27,6 +27,7 @@ Size: 361048064 bytes (344 MiB)
 SHA256: 6c6b7fbd51d023bf6cc9cd5b98066c8d49c8c01c3a191cc722959818240b0203
 MD5: 3fba5e517cdfd9072303919f1c6e3cc5
 ```
+Sadly, SR 5 Fix 1 is NOT the same size as SR 5, like SR 5 was to SR 4. It is bigger by 48936 bytes. Still Praise Allah :pray:
 
 The port will always tell you the latest version if you launch it while connected to the internet. The information will be available on the bottom right of the save select screen.
 
