@@ -1,67 +1,70 @@
 /*
 (This file is a Script resource inside the GameMaker project)
 
-this file gives gml contents to every fmod function the pizza tower switch port (v1.0.5952 SR 5) uses. by the popular demand of two (2) people, here's a public version with some comments
-you may do whatever you want with it. credit would be nice.
-
-*this will NOT work if you just import it into pizza tower! to see why, read below*
+this file gives gml contents to every fmod function the pizza tower switch port (v1.0.5952 SR 5) uses. this makes pizza tower's sound logic become entirely gml, allowing the game to be more easily ported to other platforms. 
+by the popular demand of two (2) people, here's a public version with some comments.
+you may do whatever you want with it, as per the repository's license. credit would be nice though.
 
 some important information:
 
 from what i've learned from this game, fmod does not have sounds, but sound "events"
-events can play multiple sounds, and you can pass parameters to them that have some effect on the sound.
+events have an associated "sound list", and can play any one of them. you can also pass parameters to them that have some effect on the sound(s).
 what this file does is replace this fmod event type with my own fmod_sound type.
 the game still calls all the fmod functions but they all direct to here since it's been removed,
 and now all the fmod functions now operate on the fmod_sound type.
 
-defining the sound list for each sound would've been exhausting. so what i've opted to do is make the original steam game play every sound for 8 seconds,
-recording it, and then correctly matching up each sound recording to a name which is just the event name. then, in the default case for both the soundlist switch statement, if there
-is no custom definition for this event, it just gives the soundlist one audio file, the automatically generated recording file. if there is no custom definition for the fmod_sound switch statement, it just plays
-all the sounds in the soundlist, thus covering every single sound that isn't just "play a sound file".
-the rest have been defined manually. for example, the barrel bump sound event can play one of 7 sound files! using this method, the sound that was recorded will get played, and none of the other 6.
-so i had to manually take those files out from the fmod bank and place them in the port.
-all the music tracks were manually defined as well.
-to anyone who wants to use this i leave replicating this task up to you :)
-(you could also dump the sounds from the port if you know how. i don't mind)
+defining the sound list for each event would've been exhausting. so what i've opted to do is: 
+1. get a list of all the sound event names the game ever uses by going over all the strings in the code files with a Python script
+2. mod the original steam game to play every event, for 8 seconds, recording it, and then correctly matching up each sound recording to a name which is just the event name using audacity
+3. when looking for the sound list for an event without a manual definition, it looks for the sound file with the event's name, and creates a sound list of length 1 with it
+4. when looking for the fmod_sound struct implementation of an event without a manual definition, it creates an fmod event which plays a random sound out of its sound list
 
-print() just leads to show_debug_message, i had a custom function for it since calling it a lot really lags gamemaker for some god forsaken reason so i could easily empty the function to test the game without lag spikes.
+these steps cover every single sound event in pizza tower that only simply plays a sound, and there are a lot.
 
-this file might have references to other functions or variables or whatever used in the port i'm too lazy to include those figure it out
+the rest, however, have been defined manually. for example, the barrel bump sound event can play one of 7 sound files! using this method, the random sound that was recorded will get played, and none of the other 6. 
+so i had to manually take those files out from the fmod bank and place them in the port. all the music tracks were manually defined as well because it would be silly to record all of them.
+to anyone who wants to use this script, i leave replicating this task up to you :) 
+(or you could also dump the sounds from the port if you know how, i don't mind)
 
 about the structs:
 
 fmod_sound:
-the replacement for fmod events. each has a soundlist, which is every sound that it could possibly play,
+the replacement for fmod events. each has a sound list, which is every sound that it could possibly play,
 information about the gain and pitch, looping and such. some may have statefuncs, which are functions that are called
 when the game tries to change the state of an event, stepfuncs, which are run on every frame by soundwatchers (see below),
 otherfuncs, for anytime the game tries to change a variable that isn't state (very rare), and stopfuncs, which run when the sound is stopped.
 these allow you to customize an fmod_sound easily to mimic what the original fmod event does.
 there are several functions at the bottom which return "preset" fmod sounds for music,
-since most of the music events are just "play an intro section and then loop this bit" like john gutter
+since most of the music events are just "play an intro section and then loop this bit" like john gutter (except, in this specific case, it was defined before i made the function, so john gutter doesn't use it)
 or "switch the song when the state is changed" like pizzascape.
 
 audiostoppers:
 audiostoppers fade out sounds and eventually stop/pause them. handled in obj_fmod step.
 
 soundwatchers:
-soundwatchers make sounds loop (should probably use the new gamemaker functionality instead!)
+soundwatchers make sounds loop (should probably use the new gamemaker functionality for looping instead!)
 and also make them run step functions. handled in obj_fmod step as well.
-they are also capable of destroying sound structs when they're done playing, and this functionality is used for one shot sounds.
+they are also capable of destroying sound structs when they're done playing, and this functionality is used for one shot (fire & forget) sounds.
 
-i did not realize the scope needed to replace fmod for this game,
+additional notes:
+
+* print() just leads to show_debug_message, i had a custom function for it since calling it a lot really lags gamemaker for some reason so i could easily empty the function to test the game without lag spikes.
+
+* i did not realize the scope needed to replace fmod for this game,
 and that should be a satisfactory answer to why i do x in this specific way
 
-i modified random parts of the pizza tower source code to make specific sounds behave.
+* i modified random parts of the pizza tower source code to make specific sounds behave.
 over time, some of these changes may have become obsolete due to me refining the code,
 but do not expect this to just work without any modifications
 
-if you have any questions open an issue on this repository. you could also post bug reports there for the port. i am looking.
+* this file might have references to other functions or variables or whatever used in the port i'm too lazy to include those figure it out
 
-by the way. the offical distributor of any of my ports are the tinfoil shops. i do not randomly post .nsp links
-and definitely not on 4chan, and i have never used the hard-r, like the guy claiming to be me on there. you're really weird.
+* if you have any questions open an issue on this repository. you could also post bug reports there for the port. i am looking.
+
+* by the way. i do not randomly post .nsp links on 4chan when releasing ports, and i have never used the hard-r, like the guy claiming to be me on there. you're really weird.
 
 11/11/2023:
-in retrospect, this code is very bad. but it should still have its uses.
+* in retrospect, this code is very bad. but it should still have its uses.
 
 happy porting,
 -D
