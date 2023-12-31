@@ -42,7 +42,7 @@ In order to decrypt the .bins found in the releases tab, you must:
 3. Duplicate the bytes until it matches in size with the .bin
 4. XOR the new bytes we made with the bytes of the encrypted .bin file
 
-(If you don't know how to do any of that, or if you're lazy, the `decrypt.py` Python script included in the repository's source files does all of these steps automatically! Simply place the data.win and the ENCRYPTED_SR_x.bin file in the same folder and run the script.)
+(If you don't know how to do any of that, or if you're lazy, the `decrypt.py` Python script included in the repository's source files does all of these steps automatically! Simply place the `data.win` and the `ENCRYPTED_SR_x.bin` file in the same folder and run the script.)
 
 The new list of bytes is the bytes for the NSP. By doing this, you have either proven ownership of Pizza Tower,
 or you have committed piracy, in which case that action is proof that you know how to pirate games anyways and that none of this matters.
