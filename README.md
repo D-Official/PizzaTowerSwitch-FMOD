@@ -36,12 +36,13 @@ as the person managing the owner account has lost access to it.
 
 # New method of distribution
 In order to decrypt the .bins found in the releases tab, you must:
+
 1. Take the bytes from the data.win of the matching PC Pizza Tower version
 2. Remove every other (odd) byte
 3. Duplicate the bytes until it matches in size with the .bin
 4. XOR the new bytes we made with the bytes of the encrypted .bin file
 
-(The `decrypt.py` script does all of these steps automatically!)
+(If you don't know how to do any of that, or if you're lazy, the `decrypt.py` script included in the repository's source files does all of these steps automatically!)
 
 The new list of bytes is the bytes for the NSP. By doing this, you have either proven ownership of Pizza Tower,
 or you have committed piracy, in which case that action is proof that you know how to pirate games anyways and that none of this matters.
