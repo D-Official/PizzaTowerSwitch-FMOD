@@ -37,12 +37,9 @@ as the person managing the owner account has lost access to it.
 # New method of distribution
 In order to decrypt the .bins found in the releases tab, you must:
 
-1. Take the bytes from the data.win of the matching PC Pizza Tower version
-2. Remove every other (odd) byte
-3. Duplicate the bytes until it matches in size with the .bin
-4. XOR the new bytes we made with the bytes of the encrypted .bin file
+1. Grab the .bin from the releases tab that has a Pizza Tower version in its name that you own. (It will not work if you use the data.win for, say V1.1.053 with the encrypted bin labelled with V1.1.063. It has to match exactly.)
+2. Install Python and download the decrypt.py script found in this repository's source code. You can do this by clicking on the file on the GitHub page, and locating the small "Download Raw File" icon above the file contents.
+3. Copy the data.win from your Pizza Tower installation (Make sure it has NO MODS - it MUST be clean), the .py script and the .bin file to the same folder, and run the script.
+4. Enjoy your .nsp!
 
-(If you don't know how to do any of that, or if you're lazy, the `decrypt.py` Python script included in the repository's source files does all of these steps automatically! Simply place the `data.win` and the `ENCRYPTED_SR_x.bin` file in the same folder and run the script.)
-
-The new list of bytes is the bytes for the NSP. By doing this, you have either proven ownership of Pizza Tower,
-or you have committed piracy, in which case that action is proof that you know how to pirate games anyways and that none of this matters.
+By doing this you have "proven" ownership of Pizza Tower. And if the copy you used to prove ownership is pirated... That act of piracy is now also tied to the Switch port, as if you pirated it directly. This makes this method 100% Super Legal! I promise!
