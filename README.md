@@ -14,8 +14,7 @@ Same goes for the Android port of the Switch port (Yes, that's a thing)***
 
 # Less Important Information
 
-The official way to obtain the port is through Tinfoil shops. Pretty much all the popular ones have it, as far as I know.
-
+The official way to obtain the port is through HERE.
 I don't remember when SR 1 and SR 2 were released.
 SR 3 released on 9/5/2023.
 SR 4 released on 13/11/2023.
