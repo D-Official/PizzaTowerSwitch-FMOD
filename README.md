@@ -15,18 +15,21 @@ Same goes for the Android port of the Switch port (Yes, that's a thing)***
 # Less Important Information
 
 The official way to obtain the port is through HERE.
+
+
+SR - Switch Release.
 I don't remember when SR 1 and SR 2 were released.
 SR 3 released on 9/5/2023.
 SR 4 released on 13/11/2023.
+SR 5 released on 24/11/2023, and SR 5 Fix 1 on 29/11/2023. 
+SR 6 released on 08/08/2023.
+If you want to verify that the file you have is good:
+```
+Name: Pizza Tower SR 6 [05000FD261232000][v0]
+Size: 435466456 bytes (415 MB)
+SHA256: 5A4A59D7688C4F21F0ACD743FEBCD8CED4CE4F272DDF1FD024CC57C74D092571
+```
 
-SR 5 released on 24/11/2023, and SR 5 Fix 1 on 29/11/2023. If you want to verify that the file you have is good:
-```
-Name: Pizza Tower v1.0.5952 SR 5 [05000FD261232000][v0].nsp
-Size: 361048064 bytes (344 MiB)
-SHA256: 6c6b7fbd51d023bf6cc9cd5b98066c8d49c8c01c3a191cc722959818240b0203
-MD5: 3fba5e517cdfd9072303919f1c6e3cc5
-```
-Sadly, SR 5 Fix 1 is NOT the same size as SR 5, like SR 5 was to SR 4. It is bigger by 48936 bytes. Still Praise Allah :pray:
 
 The port will always tell you the latest version if you launch it while connected to the internet. The information will be available on the bottom right of the save select screen.
 
