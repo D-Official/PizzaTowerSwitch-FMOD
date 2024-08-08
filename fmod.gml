@@ -43,6 +43,11 @@ more recently, I started putting comments on relevant events, so make sure to re
 
 Yeah, a ds_map or even a struct would've probably been better instead of two gigantic switch statements.
 
+To set up left and right panning, orient the listener like so:
+audio_listener_orientation(0, 0, 1, 0, -1, 0);
+To disable it, you can do this:
+audio_listener_orientation(0, -1, 0, 1, 0, 0);
+
 t_state and t_anyvar1 are deprecated and should not be used for new events.
 Instead, t_anyvar1 should be replaced by variables in the create function, and t_state replaced by a variable that gets reset in the on_stop function.
 I fear replacing them in the events that still use them might break things...
@@ -72,7 +77,9 @@ function fmod_init(num) {
 		audio_group_load(audiogroup_special);
 	
 	
+	audio_falloff_set_model(audio_falloff_linear_distance);
 	
+
 	global.sounds_to_play = []
 	global.sounds_to_play_delays = []
 	
@@ -2655,8 +2662,6 @@ function swap_three_tracks_intro(soundlist, bounds1, bounds2, bounds3, pause_unt
 		}
 			
 	}).set_update_func(function () {
-		var a = 0
-		a++;
 	});
 	s.bounds1 = bounds1;
 	s.bounds2 = bounds2;
