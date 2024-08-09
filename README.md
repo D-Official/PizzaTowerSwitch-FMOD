@@ -1,8 +1,8 @@
 # Really important information
 To decrypt the .bins in the releases tab, see the relevant section below.
 # Important Information
-This repository contains select code files related to FMOD from the unofficial Pizza Tower Switch port.
-With these files, the game's audio code will become 100% GML, allowing it to be ported more easily.
+This repository contains the FMOD replacement code I created for the unofficial Pizza Tower Switch port.
+With this file, the game's audio code becomes 100% GML, allowing it to be ported more easily.
 
 As per the license, and the comment inside fmod.gml: You can do whatever with this code! (and credit would be nice). Go nuts! Port the game to your phone using this! Your smart microwave! 
 Anything! It's yours!
@@ -30,7 +30,6 @@ Size: 435466456 bytes (415 MB)
 SHA256: 5A4A59D7688C4F21F0ACD743FEBCD8CED4CE4F272DDF1FD024CC57C74D092571
 ```
 
-
 The port will always tell you the latest version if you launch it while connected to the internet. The information will be available on the bottom right of the save select screen.
 
 This repository is replacing https://github.com/TurtleHouse/PizzaTowerSwitch-FMOD
@@ -39,7 +38,7 @@ as the person managing the owner account has lost access to it.
 # New method of distribution
 In order to decrypt the .bins found in the releases tab, you must:
 
-1. Grab the .bin from the releases tab that has a Pizza Tower version in its name that you own. (It will not work if you use the data.win for, say V1.1.053 with the encrypted bin labelled with V1.1.063. It has to match exactly.)
+1. Grab the .bin from the releases tab that has a Pizza Tower version in its name that you own. (It will not work if you use the data.win for, say V1.1.053 with the encrypted bin labelled with V1.1.063. It has to match exactly).
 2. Install Python and download the decrypt.py script found in this repository's source code. You can do this by clicking on the file on the GitHub page, and locating the small "Download Raw File" icon above the file contents.
 3. Copy the data.win from your Pizza Tower installation (Make sure it has NO MODS - it MUST be clean), the .py script and the .bin file to the same folder, and run the script.
 4. Enjoy your .nsp!
