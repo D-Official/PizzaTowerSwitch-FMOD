@@ -22,7 +22,7 @@ I don't remember when SR 1 and SR 2 were released.
 SR 3 released on 9/5/2023.
 SR 4 released on 13/11/2023.
 SR 5 released on 24/11/2023, and SR 5 Fix 1 on 29/11/2023. 
-SR 6 released on 08/08/2023.
+SR 6 released on 08/08/2024.
 If you want to verify that the file you have is good:
 ```
 Name: Pizza Tower SR 6 [05000FD261232000][v0]
