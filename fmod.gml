@@ -1,7 +1,7 @@
 /*
 (This file is a Script resource inside the GameMaker project)
 
-This file gives gml contents to every FMOD function the Pizza Tower Switch port (v1.1.063 SR 6) uses. By the popular demand of two (2) people, here's a public version with some comments
+This file gives gml contents to every FMOD function the Pizza Tower Switch port (v1.1.063 SR 7) uses. By the popular demand of two (2) people, here's a public version with some comments
 you may do whatever you want with it, as per the license on the GitHub (WTFPL). Credit would be nice.
 
 *This will NOT work if you just import it into Pizza Tower! to see why, read below*
@@ -33,8 +33,8 @@ I've been increasing values like it does make a difference, but it seems not to 
 very large values like 5, 10, or 50. So I've started manually increasing audio gains by changing the audio file.
 You may see gain values over 1 in this file still, but I'm fairly sure they do nothing.
 
-In the port, SFX audio files are assigned to audiogroup_sfx, Music audio files are assigned to audiogroup_default,
-and audiogroup_special so John pillar's Meatphobia track can be turned up while the music is turned down. 
+In the port, SFX audio files are assigned to audiogroup_sfx, music audio files are assigned to audiogroup_default,
+and audiogroup_special exists so John pillar's Meatphobia track can be turned up while the music is turned down. 
 I don't remember why it's done like this, probably for a good reason.
 
 I modified random parts of the Pizza Tower source code to make specific sounds behave.
@@ -79,7 +79,6 @@ function fmod_init(num) {
 	
 	audio_falloff_set_model(audio_falloff_linear_distance);
 	
-
 	global.sounds_to_play = []
 	global.sounds_to_play_delays = []
 	
@@ -289,6 +288,8 @@ function fmod_sound(soundlist)
 		return self;
 	}
 
+	// This is set for 3d one shot sounds, since their emitter needs to be freed.
+	release_when_stopped = false;
 
 	// The relevant instance, for music, is the instance that is relevant for time manipulation.
 	// This is made so, if the game tries to change an fmod_sound's timeline position, the script will know which one it should change.
@@ -383,6 +384,7 @@ function fmod_event_one_shot(str) {
 }
 function fmod_event_one_shot_3d(str, _x = x, _y = y) {
 	var snd = fmod_event_one_shot(str)
+	snd.release_when_stopped = true;
 	with (snd) {
 		if is_3d
 			audio_emitter_position(emitter, _x, _y, 0)
@@ -416,10 +418,6 @@ function fmod_event_instance_get_parameter(snd, somestring) {
 }
 
 function fmod_event_instance_release(snd) {
-	if fmod_event_instance_is_playing(snd) {
-		snd.stop();
-		snd.on_stop(false);
-	}
 	if (snd.is_3d) {
 		snd.is_3d = false;
 		audio_emitter_free(snd.emitter) 
@@ -707,6 +705,8 @@ function fmod_update() {
 		if (stopped) {
 			array_delete(global.playing_sounds, i, 1);
 			snd.on_stop(true);
+			if (snd.release_when_stopped)
+				fmod_event_instance_release(snd);
 			i--;
 			playing_len--;
 			continue;
@@ -787,6 +787,8 @@ function get_soundlist(soundname) {
 			return [MenuSelect1, MenuSelect2, MenuSelect3]
 		case "sfx/pep/mach":
 			return [sfx_mach1, sfx_mach2, sfx_mach3, sfx_mach4]
+		case "sfx/pep/jump":
+			return [sfx_pep_jump, noise_jump]
 		case "sfx/playerN/mach":
 			return [mach, mach2step, mach3step]
 		case "sfx/playerN/minijetpack":
@@ -811,6 +813,8 @@ function get_soundlist(soundname) {
 			return [Voice_14, Voice_22, Voice_23]
 		case "sfx/voice/outtransfo":
 			return [Voice_12, Voice_18, Voice_19, Noise2, Noise3, Noise6]
+		case "sfx/voice/swap":
+			return [Voice_13, Voice_20, Voice_21, Noise2, Noise3, Noise5, Voice_04, Voice_06, Voice_09]
 		case "sfx/voice/gushurt":
 			return [Voice_01, Voice_02]
 		case "sfx/voice/brickok":
@@ -1180,6 +1184,14 @@ function get_soundlist(soundname) {
 			return [New_Noise_Resolutionz_v4]
 		case "music/soundtest/lap3noise":
 			return [mu_lap3_noise]
+		case "music/soundtest/secretworld":
+			return [Secret_Lockin_v1a]
+		case "music/soundtest/halloweenrace":
+			return [Final_The_Runner_10_15_2023_Halloween_Event_2023_1_]
+		case "music/soundtest/halloweenstart":
+			return [The_Bone_Rattler]
+		case "music/soundtest/halloweenpause":
+			return [Spacey_Pumpkins]
 		case "music/halloween2023":
 			return [The_Bone_Rattler, Final_The_Runner_10_15_2023_Halloween_Event_2023_1_]
 		case "music/secretworldtitle":
@@ -1376,22 +1388,24 @@ function fmod_event_create_instance(soundpath) {
 				self.gain = global.fmod_is_noise ? 0.4 : 0.6;
 				default_play_func(global.fmod_is_noise * 2 + irandom_range(0, 1))
 			});
+		case "sfx/voice/swap": 
+			return new fmod_sound(soundlist).set_3d().set_play_func(function () {
+				default_play_func(state * 3 + irandom_range(0, 2))
+			});
 		case "sfx/voice/outtransfo":
 			return new fmod_sound(soundlist).set_3d().set_pitch_vary(0.1).set_play_func(function () {
 				default_play_func(global.fmod_is_noise * 3 + irandom_range(0, 2))
 			});
 		case "sfx/misc/transfo":
+		case "sfx/misc/spaceship":
+		case "sfx/pep/jump":
 			return new fmod_sound(soundlist).set_play_func(function () {
 				default_play_func(global.fmod_is_noise)	
 			})
 		case "sfx/pep/fireass":
-		case "sfx/pep/spaceship":
-
 		case "sfx/ending/johnending":
 		case "sfx/intro/pepgustavointro":
-		
 		case "music/finalescape":
-		
 		case "music/w1/entrancetitle":
 		case "music/w1/medievaltitle":
 		case "music/w1/ruintitle":
@@ -1936,16 +1950,10 @@ function fmod_event_create_instance(soundpath) {
 	
 				
 
-				if global.fmod_is_noise {
+				if global.fmod_is_noise
 					set_relevant_instance(noise_song)	
-					audio_pause_sound_insist(song)
-				}
-				else {
+				else
 					set_relevant_instance(song)
-					audio_pause_sound_insist(noise_song)
-				}
-				
-
 			}).set_state_func(function (new_state) {
 				if (new_state == 1) {
 					silence_audio_and_act(song, 60, SILENCE_ACTIONS.STOP)
@@ -1960,12 +1968,10 @@ function fmod_event_create_instance(soundpath) {
 					if global.fmod_is_noise {
 						set_relevant_instance(noise_song)
 						unsilence_audio(noise_song, 30, noise_song_gain)
-						audio_pause_sound_insist(song)
 					}
 					else {
 						set_relevant_instance(song)
-						unsilence_audio(song, 30, song_gain)
-						audio_pause_sound_insist(noise_song)	
+						unsilence_audio(song, 30, song_gain)	
 					}
 
 				}
@@ -1985,12 +1991,10 @@ function fmod_event_create_instance(soundpath) {
 					if global.fmod_is_noise {
 						set_relevant_instance(noise_song)
 						unsilence_audio(noise_song, 30)
-						audio_pause_sound_insist(song)		
 					}
 					else {
 						set_relevant_instance(song)
-						unsilence_audio(song, 30)
-						audio_pause_sound_insist(noise_song)		
+						unsilence_audio(song, 30)	
 					}
 						
 					song_gain = 1;
@@ -2016,36 +2020,24 @@ function fmod_event_create_instance(soundpath) {
 					if global.fmod_is_noise {
 						set_relevant_instance(noise_song)
 						unsilence_audio(noise_song, 30, noise_song_gain)
-						audio_pause_sound_insist(song)	
 					}
 					else {
 						set_relevant_instance(song)
-						unsilence_audio(song, 30, song_gain)
-						audio_pause_sound_insist(noise_song)		
+						unsilence_audio(song, 30, song_gain)	
 					}
 					
 					
 				}
 			}).set_noise_func(function () {
-				var is_paused = (array_length(instances_to_unpause) != 0)
-				
 				if (global.fmod_is_noise) {
-					if !is_paused
-						audio_resume_sound(noise_song)
-					else
-						instances_to_unpause = [noise_song]
 					set_relevant_instance(noise_song)
 					unsilence_audio(noise_song, 30, noise_song_gain)
-					silence_audio_and_act(song, 30, SILENCE_ACTIONS.PAUSE)
+					silence_audio_and_act(song, 30, SILENCE_ACTIONS.NOTHING)
 				}
 				else {
-					if !is_paused
-						audio_resume_sound(song)
-					else
-						instances_to_unpause = [song]
 					set_relevant_instance(song)
 					unsilence_audio(song, 30, song_gain)
-					silence_audio_and_act(noise_song, 30, SILENCE_ACTIONS.PAUSE)
+					silence_audio_and_act(noise_song, 30, SILENCE_ACTIONS.NOTHING)
 				}
 				
 			});
@@ -2309,12 +2301,18 @@ function fmod_event_create_instance(soundpath) {
 				set_bounds(0, 60 * 2 + 38.4);
 				stop_currently_playing_instances()
 				phase_3_index = 2 + global.fmod_is_noise_file
+				song_progress = 0;
 				default_play_func();
 			}).set_state_func(function(new_state) {
 				if (array_length(instances) != 1)
 					return;
-				switch (new_state) {
-					case 1:	
+				if new_state <= song_progress
+					exit;
+				song_progress = new_state;
+				
+				switch (song_progress) {
+					// pizzaface opens up
+					case 1: 
 						silence_audio_and_act(instances[0], 10, SILENCE_ACTIONS.STOP)
 						var inst = audio_play_sound(soundlist[1], 10, true, 0)
 						instances[0] = inst;
@@ -2322,39 +2320,52 @@ function fmod_event_create_instance(soundpath) {
 						audio_sound_gain(instances[0], 1, 166)
 						set_bounds(19.23, 38.45)
 						break;
+					// gun phase
 					case 1.4: // WHY. why 1.4. why not 1.5 if you have an intermediate state. what the fuck.
 						audio_sound_set_track_position(instances[0], 38.45)
 						set_bounds(0.03, 60 * 2 + 56.43)
 						break;
+					// pizzaface brings the other bosses
 					case 2:
 						silence_audio_and_act(instances[0], 30, SILENCE_ACTIONS.STOP)
-						var inst = audio_play_sound(soundlist[phase_3_index], 10, false, 0)
+						var inst = audio_play_sound(soundlist[phase_3_index], 10, true, 0)
 						instances[0] = inst;
-						main_instances[0] = inst;
-						var end_bound = !global.fmod_is_noise_file ? 60 * 3 + 21.60 : 60 * 3
-						audio_sound_gain(instances[0], 1, 166)
-						set_bounds(0, end_bound)
+						main_instances = []
+						audio_sound_gain(inst, 1, 166)
+						
+						if global.fmod_is_noise_file {
+							audio_sound_loop_start(inst, 9.60)
+							audio_sound_loop_end(inst, 14.4)
+						}
+						else {
+							audio_sound_loop_end(inst, 60 * 3 + 21.60)
+						}
+						
+						set_bounds(0, 60 * 3 + 21.60)
 						break;
+					// peppino beats up the bosses
 					case 3:
 						silence_audio_and_act(instances[0], 30, SILENCE_ACTIONS.STOP)
 						var inst = audio_play_sound(soundlist[phase_3_index], 10, true, 0)
 						instances[0] = inst;
 						main_instances[0] = inst;
 						audio_sound_gain(instances[0], 1, 166)
-						var forwardskip = !global.fmod_is_noise_file ? 42.6 : 14.2
+						var forwardskip = !global.fmod_is_noise_file ? 42 : 13.8
 						audio_sound_set_track_position(instances[0], forwardskip)
 						break;
+					// peppino beats up pizzaface
 					case 4:
 						silence_audio_and_act(instances[0], 30, SILENCE_ACTIONS.STOP)
 						var inst = audio_play_sound(soundlist[phase_3_index], 10, true, 0)
 						instances[0] = inst;
 						main_instances[0] = inst;
-						audio_sound_gain(instances[0], 1, 333)
+						unsilence_audio(instances[0], 30)
 						var start_bound = !global.fmod_is_noise_file ? 60 * 3 + 21.60 : 60 * 3
 						var end_bound = !global.fmod_is_noise_file ? 60 * 4 + 19.20 : 60 * 3 + 38.40
 						audio_sound_set_track_position(instances[0], start_bound)
 						set_bounds(start_bound, end_bound)
 						break;
+					// peppino really beats up pizzaface
 					case 5:
 						silence_audio_and_act(instances[0], 60, SILENCE_ACTIONS.STOP)
 						if global.fmod_is_noise_file
@@ -2371,17 +2382,23 @@ function fmod_event_create_instance(soundpath) {
 			}).set_update_func(function () {
 				if array_length(instances) != 1
 					return;
-				switch (t_state) {
+				switch (song_progress) {
 					case 3:
-						if audio_sound_get_track_position(instances[0]) > 48
-							set_bounds(48, 60 * 3 + 21.60)
+						if !global.fmod_is_noise_file {
+							if audio_sound_get_track_position(instances[0]) > 48
+								set_bounds(48, 60 * 3 + 21.60)
+						}
+						else {
+							if audio_sound_get_track_position(instances[0]) > 19.2
+								set_bounds(19.2, 60 * 3)
+						}
 						break;
 					case 4:
 						if !global.fmod_is_noise_file && audio_sound_get_track_position(instances[0]) > 60 * 3 + 26.40
 							set_bounds(60 * 3 + 26.40, 60 * 4 + 19.20)
 						break;
 				}	
-			})
+			});
 		case "sfx/ending/towercollapsetrack":
 			return new fmod_sound(soundlist).set_gain(0).set_create_func(function () {
 				song = noone
@@ -2662,6 +2679,7 @@ function swap_three_tracks_intro(soundlist, bounds1, bounds2, bounds3, pause_unt
 		}
 			
 	}).set_update_func(function () {
+
 	});
 	s.bounds1 = bounds1;
 	s.bounds2 = bounds2;
