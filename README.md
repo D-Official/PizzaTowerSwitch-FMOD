@@ -24,11 +24,12 @@ SR 4 released on 13/11/2023.
 SR 5 released on 24/11/2023, and SR 5 Fix 1 on 29/11/2023. 
 SR 6 released on 08/08/2024.
 SR 7 released on 11/08/2024.
+SR 8 released on 15/08/2024.
 If you want to verify that the file you have is good:
 ```
-Name: Pizza Tower SR 7 [05000FD261232000][v0]
-Size: 435482840 bytes (415 MB)
-SHA256: FD5BC34A23DE88879C2C88DB5349BFE099A4EA5C255BB657C08689C1977AC540
+Name: Pizza Tower SR 8 [05000FD261232000][v0]
+Size: 435482840 bytes (415 MiB)
+SHA256: C258496F880EEABFD8D5BE104CA5BF7B3871F67BF13F59CA5D14DD579213999A
 ```
 
 The port will always tell you the latest version if you launch it while connected to the internet. The information will be available on the bottom right of the save select screen.
