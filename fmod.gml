@@ -1,7 +1,7 @@
 /*
 (This file is a Script resource inside the GameMaker project)
 
-This file gives gml contents to every FMOD function the Pizza Tower Switch port (v1.1.063 SR 7) uses. By the popular demand of two (2) people, here's a public version with some comments
+This file gives gml contents to every FMOD function the Pizza Tower Switch port (v1.1.063 SR 8) uses. By the popular demand of two (2) people, here's a public version with some comments
 you may do whatever you want with it, as per the license on the GitHub (WTFPL). Credit would be nice.
 
 *This will NOT work if you just import it into Pizza Tower! to see why, read below*
@@ -9,12 +9,12 @@ you may do whatever you want with it, as per the license on the GitHub (WTFPL). 
 The purpose of this file is not to provide a general, accurate replacement for FMOD functionality (it's not) 
 but to replicate just enough to make this game work, and to allow dictating sound behavior using GML code.
 
-From what I've learned from this game, FMOD does not have sounds, but sound "events"
-events can play multiple sounds, and you can pass parameters to them that have some effect on the output.
+From what I've learned from this game, FMOD does not have sounds, but sound "events".
+Events can play multiple sounds, and you can pass parameters to them that have some effect on the output.
 What this file essentially does is replace this FMOD event type with my own fmod_sound type.
 The game still calls all the FMOD functions but they all direct to here since it's been removed, and now all the FMOD functions now operate on the fmod_sound type.
 
-Defining the sound list for each sound, that is, the list of every sound file associated with it, would've been exhausting to do manually. 
+Defining the sound list for each event, that is, the list of every sound file associated with it, would've been exhausting to do manually. 
 So what I've opted to do is mod the original game on PC to play every sound event for 8 seconds, recording it, and then correctly matching up each sound recording to a name which 
 is just the event name (but slashes replaced with underscores, since you can't have those in the name).
 then, in case there is no manual definition for the event's sound list, it tries searching for a sound with the event name (with underscores), which would be our recorded file.
@@ -51,6 +51,10 @@ audio_listener_orientation(0, -1, 0, 1, 0, 0);
 t_state and t_anyvar1 are deprecated and should not be used for new events.
 Instead, t_anyvar1 should be replaced by variables in the create function, and t_state replaced by a variable that gets reset in the on_stop function.
 I fear replacing them in the events that still use them might break things...
+
+Sound instances in the main_instances array are managed by a loop in fmod_update - 
+DON'T use it for new events. They were a bad idea, and if I cared enough I would remove it
+from the script.
 
 Regarding the Noise update:
 The fmod parameter "isnoise", together with "swapmode", radically changes a lot of the events. 
@@ -301,8 +305,8 @@ function fmod_sound(soundlist)
 		return audio_is_playing(relevant_instance)
 	}
 	
+
 	is_default_stopped_condition = true // optimization
-	
 	// The stopped condition is the condition required for the sound to be considered stopped
 	stopped_condition = method(self, default_stopped_condition);
 	function set_stopped_condition(stopped_condition) {
@@ -1398,11 +1402,11 @@ function fmod_event_create_instance(soundpath) {
 			});
 		case "sfx/misc/transfo":
 		case "sfx/misc/spaceship":
+		case "sfx/pep/fireass":
 		case "sfx/pep/jump":
 			return new fmod_sound(soundlist).set_play_func(function () {
 				default_play_func(global.fmod_is_noise)	
 			})
-		case "sfx/pep/fireass":
 		case "sfx/ending/johnending":
 		case "sfx/intro/pepgustavointro":
 		case "music/finalescape":
@@ -2297,107 +2301,116 @@ function fmod_event_create_instance(soundpath) {
 			})
 			
 		case "music/boss/pizzaface":
-			return new fmod_sound(soundlist).should_loop().set_play_func(function () {
-				set_bounds(0, 60 * 2 + 38.4);
+			return new fmod_sound(soundlist).set_create_func(function () {
+				phase_3_index = 2 + global.fmod_is_noise_file;
+				song_progress = 0;
+				song = noone
+			}).set_play_func(function () {
 				stop_currently_playing_instances()
+				//set_bounds(0, 60 * 2 + 38.4);
 				phase_3_index = 2 + global.fmod_is_noise_file
 				song_progress = 0;
-				default_play_func();
+				song = audio_play_sound(soundlist[0], 10, true)
+				array_push(instances, song)
+				audio_sound_loop_start(song, 19.39)
+				audio_sound_loop_end(song, 60 * 2 + 36.36)
 			}).set_state_func(function(new_state) {
-				if (array_length(instances) != 1)
-					return;
-				if new_state <= song_progress
+				if new_state <= song_progress || !audio_is_playing(song)
 					exit;
 				song_progress = new_state;
 				
 				switch (song_progress) {
 					// pizzaface opens up
-					case 1: 
-						silence_audio_and_act(instances[0], 10, SILENCE_ACTIONS.STOP)
-						var inst = audio_play_sound(soundlist[1], 10, true, 0)
-						instances[0] = inst;
-						main_instances[0] = inst;
-						audio_sound_gain(instances[0], 1, 166)
-						set_bounds(19.23, 38.45)
+					case 1:
+						silence_audio_and_act(song, 10, SILENCE_ACTIONS.STOP)
+						song = audio_play_sound(soundlist[1], 10, true, 0, 19.23)
+						array_push(instances, song)
+						//set_bounds(19.23, 38.45)
+						unsilence_audio(song, 10)
+						audio_sound_loop_start(song, 19.23)
+						audio_sound_loop_end(song, 38.43)
 						break;
 					// gun phase
 					case 1.4: // WHY. why 1.4. why not 1.5 if you have an intermediate state. what the fuck.
-						audio_sound_set_track_position(instances[0], 38.45)
-						set_bounds(0.03, 60 * 2 + 56.43)
+						if audio_is_playing(song) {
+							audio_sound_loop_start(song, 0.03)
+							audio_sound_loop_end(song, 60 * 2 + 56.43)
+							audio_sound_set_track_position(song, 38.43)
+						}
+						//set_bounds(0.03, 60 * 2 + 56.43)
 						break;
 					// pizzaface brings the other bosses
 					case 2:
-						silence_audio_and_act(instances[0], 30, SILENCE_ACTIONS.STOP)
-						var inst = audio_play_sound(soundlist[phase_3_index], 10, true, 0)
-						instances[0] = inst;
-						main_instances = []
-						audio_sound_gain(inst, 1, 166)
+						silence_audio_and_act(song, 30, SILENCE_ACTIONS.STOP)
+						song = audio_play_sound(soundlist[phase_3_index], 10, true, 0)
+						array_push(instances, song)
+						unsilence_audio(song, 10)
 						
-						if global.fmod_is_noise_file {
-							audio_sound_loop_start(inst, 9.60)
-							audio_sound_loop_end(inst, 14.4)
+						if !global.fmod_is_noise_file {
+							audio_sound_loop_end(song, 60 * 3 + 21.60)
 						}
 						else {
-							audio_sound_loop_end(inst, 60 * 3 + 21.60)
+							audio_sound_loop_start(song, 9.60)
+							audio_sound_loop_end(song, 14.4)
 						}
 						
-						set_bounds(0, 60 * 3 + 21.60)
+						//set_bounds(0, 60 * 3 + 21.60)
 						break;
 					// peppino beats up the bosses
 					case 3:
-						silence_audio_and_act(instances[0], 30, SILENCE_ACTIONS.STOP)
-						var inst = audio_play_sound(soundlist[phase_3_index], 10, true, 0)
-						instances[0] = inst;
-						main_instances[0] = inst;
-						audio_sound_gain(instances[0], 1, 166)
+						silence_audio_and_act(song, 30, SILENCE_ACTIONS.STOP)
+			
 						var forwardskip = !global.fmod_is_noise_file ? 42 : 13.8
-						audio_sound_set_track_position(instances[0], forwardskip)
+						
+						song = audio_play_sound(soundlist[phase_3_index], 10, true, 0, forwardskip)
+						array_push(instances, song)
+						unsilence_audio(song, 10)
+						
+						if !global.fmod_is_noise_file {
+							audio_sound_loop_start(song, 48)
+							audio_sound_loop_end(song, 3 * 60 + 21.60)
+						}
+						else {
+							audio_sound_loop_start(song, 19.20)
+							audio_sound_loop_end(song, 3 * 60)
+						}
+
+						
+						
 						break;
 					// peppino beats up pizzaface
 					case 4:
-						silence_audio_and_act(instances[0], 30, SILENCE_ACTIONS.STOP)
-						var inst = audio_play_sound(soundlist[phase_3_index], 10, true, 0)
-						instances[0] = inst;
-						main_instances[0] = inst;
-						unsilence_audio(instances[0], 30)
-						var start_bound = !global.fmod_is_noise_file ? 60 * 3 + 21.60 : 60 * 3
-						var end_bound = !global.fmod_is_noise_file ? 60 * 4 + 19.20 : 60 * 3 + 38.40
-						audio_sound_set_track_position(instances[0], start_bound)
-						set_bounds(start_bound, end_bound)
+					
+						// there seems to be an EXTREMELY peculiar bug where, if I already assigned a song's end point to a number,
+						// setting it to a DIFFERENT song's start point won't do anything and it will act as if the start point is 0.
+						// offsetting the time by something like 0.01 seems to work.
+						silence_audio_and_act(song, 30, SILENCE_ACTIONS.STOP)
+						
+						song = audio_play_sound(soundlist[phase_3_index], 10, true, 0, !global.fmod_is_noise_file ? 60 * 3 + 21.60 + 0.01 : 60 * 3 + 0.01)
+						array_push(instances, song)
+						
+						unsilence_audio(song, 30)
+						if !global.fmod_is_noise_file {
+							audio_sound_loop_start(song, 60 * 3 + 21.60 + 0.01)
+							audio_sound_loop_end(song, 60 * 4 + 19.20)
+						}
+						else {
+							audio_sound_loop_start(song, 60 * 3 + 0.01) 
+							audio_sound_loop_end(song, 60 * 3 + 38.40)
+						}
+						
+						
 						break;
 					// peppino really beats up pizzaface
 					case 5:
-						silence_audio_and_act(instances[0], 60, SILENCE_ACTIONS.STOP)
+						silence_audio_and_act(song, 60, SILENCE_ACTIONS.STOP)
 						if global.fmod_is_noise_file
 							break;
-						looping = false;
-						var inst = audio_play_sound(soundlist[phase_3_index], 10, false, 0)
-						instances[0] = inst;
-						main_instances[0] = inst;
-						audio_sound_gain(instances[0], 1, 333)
-						audio_sound_set_track_position(instances[0], 60 * 4 + 19.20)
-						set_bounds(60 * 4 + 19.20, 0)
+						song = audio_play_sound(soundlist[phase_3_index], 10, false, 0, 60 * 4 + 19.20)
+						array_push(instances, song)
+						unsilence_audio(song, 20)
 						break;
 				}
-			}).set_update_func(function () {
-				if array_length(instances) != 1
-					return;
-				switch (song_progress) {
-					case 3:
-						if !global.fmod_is_noise_file {
-							if audio_sound_get_track_position(instances[0]) > 48
-								set_bounds(48, 60 * 3 + 21.60)
-						}
-						else {
-							if audio_sound_get_track_position(instances[0]) > 19.2
-								set_bounds(19.2, 60 * 3)
-						}
-						break;
-					case 4:
-						if !global.fmod_is_noise_file && audio_sound_get_track_position(instances[0]) > 60 * 3 + 26.40
-							set_bounds(60 * 3 + 26.40, 60 * 4 + 19.20)
-						break;
-				}	
 			});
 		case "sfx/ending/towercollapsetrack":
 			return new fmod_sound(soundlist).set_gain(0).set_create_func(function () {
