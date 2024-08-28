@@ -1,3 +1,6 @@
+# Archived!
+https://github.com/D-Official/PizzaTowerSwitch-FMOD/issues/68
+
 # Really important information
 To decrypt the .bins in the releases tab, see the relevant section below.
 # Important Information
